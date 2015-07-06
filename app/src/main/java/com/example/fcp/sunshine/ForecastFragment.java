@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -94,9 +93,13 @@ public class ForecastFragment extends Fragment {
         list_forecast.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                /*
                 TextView itemView = (TextView)
                         view.findViewById(R.id.list_item_forecast_textview);
                 Toast.makeText(getActivity(),itemView.getText(),Toast.LENGTH_SHORT).show();
+                */
+                String forecast = mForecastAdapter.getItem(position);
+                Toast.makeText(getActivity(),forecast, Toast.LENGTH_SHORT).show();
             }
         });
 
