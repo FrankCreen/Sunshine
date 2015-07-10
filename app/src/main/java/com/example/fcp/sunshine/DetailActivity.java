@@ -1,13 +1,12 @@
 package com.example.fcp.sunshine;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 public class DetailActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,6 +16,7 @@ public class DetailActivity extends AppCompatActivity {
         detailTextView.setText(getIntent().
                 getStringExtra(ForecastFragment.EXTRA_FORECAST_DETAIL));
     }
+
 
 
     @Override
@@ -40,4 +40,6 @@ public class DetailActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
+

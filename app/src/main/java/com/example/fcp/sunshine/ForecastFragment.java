@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
  */
 public class ForecastFragment extends Fragment {
     ArrayAdapter<String> mForecastAdapter;
+    Uri mGeoLocation = null;
     public static final String EXTRA_FORECAST_DETAIL = "com.example.fcp.sunshine." +
             "forecast_detail";
 
@@ -91,6 +93,17 @@ public class ForecastFragment extends Fragment {
         new FetchWeatherTask().execute(location);
     }
 
+    public void showMap(Uri geoLocation) {
+        if(geoLocation!=null){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(geoLocation);
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(intent);
+        } } else {
+            Log.d("ForecastFragment","Location is null!");
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -121,7 +134,13 @@ public class ForecastFragment extends Fragment {
             }
         });
 
-
+        Button btnShowMap = (Button) rootView.findViewById(R.id.buttonShowMap);
+        btnShowMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMap(mGeoLocation);
+            }
+        });
         return rootView;
     }
 
@@ -158,6 +177,7 @@ public class ForecastFragment extends Fragment {
             return highLowStr;
         }
 
+
         /**
          * Take the String representing the complete forecast in JSON Format and
          * pull out the data we need to construct the Strings needed for the wireframes.
@@ -176,7 +196,21 @@ public class ForecastFragment extends Fragment {
             final String OWM_MIN = "min";
             final String OWM_DESCRIPTION = "main";
 
+            final String OWM_CITY = "city";
+            final String OWM_COORD = "coord";
+            final String OWM_LAT = "lat";
+            final String OWM_LON = "lon";
+
             JSONObject forecastJson = new JSONObject(forecastJsonStr);
+
+
+            //get the prefered city's coordinate
+            JSONObject cityObject = forecastJson.getJSONObject(OWM_CITY);
+            JSONObject coordObject = cityObject.getJSONObject(OWM_COORD);
+            double latitude = coordObject.getDouble(OWM_LAT);
+            double longtitude = coordObject.getDouble(OWM_LON);
+            mGeoLocation = Uri.parse("geo:" + latitude + "," + longtitude + "?z=11");
+
             JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
 
             // OWM returns daily forecasts based upon the local time of the city that is being
@@ -229,7 +263,7 @@ public class ForecastFragment extends Fragment {
                 double high = temperatureObject.getDouble(OWM_MAX);
                 double low = temperatureObject.getDouble(OWM_MIN);
 
-                highAndLow = formatHighLows(high, low,unitType);
+                highAndLow = formatHighLows(high, low, unitType);
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
 

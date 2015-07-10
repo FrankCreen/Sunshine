@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">Sunshine</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+
     <string name="Date">Today,June 24</string>
     <string name="max_temp">21 度</string>
     <string name="min_temp">8 度</string>
     <string name="weather">Cloudy</string>
-    <string name="action_refresh" translateable="false">Refresh</string>
+
     <string name="title_activity_detail">Details</string>
     <string name="title_activity_settings">Settings</string>
     <string name="pref_location_label">Location</string>
@@ -15,6 +15,11 @@
     <string name="pref_unitsType_label">Temperature Units</string>
     <string name="pref_unitsType_key">UnitsType</string>
     <string name="pref_unitsType_default">metric</string>
+
+    <string name="action_map">Map Location</string>
+    <string name="action_refresh" translateable="false">Refresh</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_share">Share</string>
 
     <string-array name="pref_unitsType_entries">
         <item>Metric</item>
