@@ -17,6 +17,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            resources.srcDirs = ['src/main/resources']
+            java.srcDirs = ['src/main/java', 'src/androidTest/java/com/example/fcp/sunshine/utils', 'src/androidTest/java/com/example/fcp/sunshine/data', 'src/main/java/com/example/fcp/sunshine/data']
+        }
+    }
 }
 
 dependencies {
