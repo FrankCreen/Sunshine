@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 
 /captures
 *.PNG
+=======
+.gradle
+>>>>>>> lesson4-a
 .DS_Store
 
 # built application files
@@ -41,5 +45,8 @@ project.properties
 *.iws
 
 ##Gradle-based build
+<<<<<<< HEAD
 .gradle
+=======
+>>>>>>> lesson4-a
 build/
