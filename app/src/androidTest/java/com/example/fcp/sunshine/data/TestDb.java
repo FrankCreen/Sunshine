@@ -28,7 +28,7 @@ public class TestDb extends AndroidTestCase {
 
     // Since we want each test to start with a clean slate
     void deleteTheDatabase() {
-        mContext.deleteDatabase(WeatherDbHelper.DATABASE_NAME);
+        mContext.deleteDatabase(com.example.fcp.sunshine.data.WeatherDbHelper.DATABASE_NAME);
     }
 
     /*
@@ -53,11 +53,11 @@ public class TestDb extends AndroidTestCase {
         // Note that there will be another table in the DB that stores the
         // Android metadata (db version information)
         final HashSet<String> tableNameHashSet = new HashSet<String>();
-        tableNameHashSet.add(WeatherContract.LocationEntry.TABLE_NAME);
-        tableNameHashSet.add(WeatherContract.WeatherEntry.TABLE_NAME);
+        tableNameHashSet.add(com.example.fcp.sunshine.data.WeatherContract.LocationEntry.TABLE_NAME);
+        tableNameHashSet.add(com.example.fcp.sunshine.data.WeatherContract.WeatherEntry.TABLE_NAME);
 
-        mContext.deleteDatabase(WeatherDbHelper.DATABASE_NAME);
-        SQLiteDatabase db = new WeatherDbHelper(
+        mContext.deleteDatabase(com.example.fcp.sunshine.data.WeatherDbHelper.DATABASE_NAME);
+        SQLiteDatabase db = new com.example.fcp.sunshine.data.WeatherDbHelper(
                 this.mContext).getWritableDatabase();
         assertEquals(true, db.isOpen());
 
@@ -78,7 +78,7 @@ public class TestDb extends AndroidTestCase {
                 tableNameHashSet.isEmpty());
 
         // now, do our tables contain the correct columns?
-        c = db.rawQuery("PRAGMA table_info(" + WeatherContract.LocationEntry.TABLE_NAME + ")",
+        c = db.rawQuery("PRAGMA table_info(" + com.example.fcp.sunshine.data.WeatherContract.LocationEntry.TABLE_NAME + ")",
                 null);
 
         assertTrue("Error: This means that we were unable to query the database for table information.",
@@ -86,11 +86,11 @@ public class TestDb extends AndroidTestCase {
 
         // Build a HashSet of all of the column names we want to look for
         final HashSet<String> locationColumnHashSet = new HashSet<String>();
-        locationColumnHashSet.add(WeatherContract.LocationEntry._ID);
-        locationColumnHashSet.add(WeatherContract.LocationEntry.COLUMN_CITY_NAME);
-        locationColumnHashSet.add(WeatherContract.LocationEntry.COLUMN_COORD_LAT);
-        locationColumnHashSet.add(WeatherContract.LocationEntry.COLUMN_COORD_LONG);
-        locationColumnHashSet.add(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING);
+        locationColumnHashSet.add(com.example.fcp.sunshine.data.WeatherContract.LocationEntry._ID);
+        locationColumnHashSet.add(com.example.fcp.sunshine.data.WeatherContract.LocationEntry.COLUMN_CITY_NAME);
+        locationColumnHashSet.add(com.example.fcp.sunshine.data.WeatherContract.LocationEntry.COLUMN_COORD_LAT);
+        locationColumnHashSet.add(com.example.fcp.sunshine.data.WeatherContract.LocationEntry.COLUMN_COORD_LONG);
+        locationColumnHashSet.add(com.example.fcp.sunshine.data.WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING);
 
         int columnNameIndex = c.getColumnIndex("name");
         do {
@@ -129,9 +129,9 @@ public class TestDb extends AndroidTestCase {
         */
         insertLocation();
         // Query the database and receive a Cursor back
-        SQLiteDatabase db = new WeatherDbHelper(this.mContext).getReadableDatabase();
+        SQLiteDatabase db = new com.example.fcp.sunshine.data.WeatherDbHelper(this.mContext).getReadableDatabase();
         assertTrue("Database open failure!", db.isOpen());
-        Cursor cursor = db.query(WeatherContract.LocationEntry.TABLE_NAME,
+        Cursor cursor = db.query(com.example.fcp.sunshine.data.WeatherContract.LocationEntry.TABLE_NAME,
                 null,
                 null,
                 null,
@@ -144,8 +144,8 @@ public class TestDb extends AndroidTestCase {
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
-        ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
-        TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed", cursor,
+        ContentValues testValues = com.example.fcp.sunshine.data.TestUtilities.createNorthPoleLocationValues();
+        com.example.fcp.sunshine.data.TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed", cursor,
                 testValues);
         // Finally, close the cursor and database
         assertFalse("Error: More than one record returned from location query", cursor.moveToNext());
@@ -170,18 +170,18 @@ public class TestDb extends AndroidTestCase {
         // and our testLocationTable can only return void because it's a test.
         long locationRowID = insertLocation();
         // First step: Get reference to writable database
-        SQLiteDatabase db = new WeatherDbHelper(this.mContext).getWritableDatabase();
+        SQLiteDatabase db = new com.example.fcp.sunshine.data.WeatherDbHelper(this.mContext).getWritableDatabase();
         assertTrue("Database open failure!", db.isOpen());
         // Create ContentValues of what you want to insert
         // (you can use the createWeatherValues TestUtilities function if you wish)
-        ContentValues testWeatherValues = TestUtilities.createWeatherValues(locationRowID);
+        ContentValues testWeatherValues = com.example.fcp.sunshine.data.TestUtilities.createWeatherValues(locationRowID);
         // Insert ContentValues into database and get a row ID back
-        long weatherRowId = db.insert(WeatherContract.WeatherEntry.TABLE_NAME,
+        long weatherRowId = db.insert(com.example.fcp.sunshine.data.WeatherContract.WeatherEntry.TABLE_NAME,
                 null,
                 testWeatherValues);
         assertTrue(weatherRowId != -1);
         // Query the database and receive a Cursor back
-        Cursor weatherCursor = db.query(WeatherContract.WeatherEntry.TABLE_NAME,
+        Cursor weatherCursor = db.query(com.example.fcp.sunshine.data.WeatherContract.WeatherEntry.TABLE_NAME,
                 null,
                 null,
                 null,
@@ -193,7 +193,7 @@ public class TestDb extends AndroidTestCase {
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
-        TestUtilities.validateCurrentRecord("Error: Weather Query Validation Failed", weatherCursor,
+        com.example.fcp.sunshine.data.TestUtilities.validateCurrentRecord("Error: Weather Query Validation Failed", weatherCursor,
                 testWeatherValues);
 
         // Finally, close the cursor and database
@@ -210,16 +210,16 @@ public class TestDb extends AndroidTestCase {
      */
     public long insertLocation() {
         // First step: Get reference to writable database
-        SQLiteDatabase db = new WeatherDbHelper(
+        SQLiteDatabase db = new com.example.fcp.sunshine.data.WeatherDbHelper(
                 this.mContext).getWritableDatabase();
         assertTrue("Database open failure!", db.isOpen());
 
         // Create ContentValues of what you want to insert
         // (you can use the createNorthPoleLocationValues if you wish)
-        ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
+        ContentValues testValues = com.example.fcp.sunshine.data.TestUtilities.createNorthPoleLocationValues();
 
         // Insert ContentValues into database and get a row ID back
-        long locationRowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
+        long locationRowId = db.insert(com.example.fcp.sunshine.data.WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
         assertTrue(locationRowId != -1);
         return locationRowId;
     }
