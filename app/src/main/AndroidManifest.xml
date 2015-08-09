@@ -35,6 +35,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.fcp.sunshine.MainActivity"/>
         </activity>
+        
+        <provider
+            android:authorities="com.example.fcp.sunshine"
+            android:name="com.example.fcp.sunshine.data.WeatherProvider">
+        </provider>
+
     </application>
 
 </manifest>
