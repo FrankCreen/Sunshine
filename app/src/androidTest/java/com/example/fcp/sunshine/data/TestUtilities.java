@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.test.AndroidTestCase;
-import android.util.Log;
 
 import com.example.fcp.sunshine.utils.PollingCheck;
 
@@ -27,7 +26,7 @@ public class TestUtilities extends AndroidTestCase {
 
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
         assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
-        validateCurrentRecord(error, valueCursor, expectedValues);
+        validateCurrentRecord(error, valueCursor, expectedValues);//
         valueCursor.close();
     }
 
@@ -37,8 +36,10 @@ public class TestUtilities extends AndroidTestCase {
             String columnName = entry.getKey();
             int idx = valueCursor.getColumnIndex(columnName);
             assertFalse("Column '" + columnName + "' not found. " + error, idx == -1);
+            //注意！：得到的是字符串！！！
             String expectedValue = entry.getValue().toString();
-            Log.i("Cursor",columnName + " : " + valueCursor.getString(idx));
+            //自己写的调试代码
+           // Log.i("Cursor",columnName + " : " + valueCursor.getString(idx));
             assertEquals("Value '" + entry.getValue().toString() +
                     "' did not match the expected value '" +
                     expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
@@ -75,7 +76,6 @@ public class TestUtilities extends AndroidTestCase {
         testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, "North Pole");
         testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, 64.7488);
         testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, -147.353);
-
         return testValues;
     }
 
