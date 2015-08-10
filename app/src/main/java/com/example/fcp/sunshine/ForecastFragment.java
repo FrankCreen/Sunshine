@@ -1,10 +1,9 @@
 package com.example.fcp.sunshine;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,18 +12,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import java.util.ArrayList;
+import com.example.fcp.sunshine.data.WeatherContract;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class ForecastFragment extends Fragment {
-    ArrayAdapter<String> mForecastAdapter;
+    //ArrayAdapter<String> mForecastAdapter;
+    private ForecastAdapter mForecastAdapter;
     //show the location using google map
     Uri mGeoLocation = null;
     public static final String EXTRA_FORECAST_DETAIL = "com.example.fcp.sunshine." +
@@ -69,56 +67,46 @@ public class ForecastFragment extends Fragment {
     }
 
     private void updateWeather() {
-        SharedPreferences sharedPref = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
-        String location = sharedPref.getString(
-                getString(R.string.pref_location_key),
-                getString(R.string.pref_location_default));
-        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity(),mForecastAdapter);
+        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
+        String location = Utility.getPreferredLocation(getActivity());
         weatherTask.execute(location);
 
     }
 
     public void showMap(Uri geoLocation) {
-        if(geoLocation!=null){
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(geoLocation);
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivity(intent);
-        } } else {
-            Log.d("ForecastFragment","Location is null!");
+        if (geoLocation != null) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(geoLocation);
+            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivity(intent);
+            }
+        } else {
+            Log.d("ForecastFragment", "Location is null!");
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+        String locationSetting = Utility.getPreferredLocation(getActivity());
+
+        // Sort order:  Ascending, by date.
+        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+                locationSetting, System.currentTimeMillis());
+
+        Cursor cur = getActivity().getContentResolver().query(weatherForLocationUri,
+                null, null, null, sortOrder);
+        // The CursorAdapter will take data from our cursor and populate the ListView
+        // However, we cannot use FLAG_AUTO_REQUERY since it is deprecated, so we will end
+        // up with an empty list the first time we run.
+        mForecastAdapter = new ForecastAdapter(getActivity(), cur, 0);
+
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        mForecastAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.list_item_forecast, R.id.list_item_forecast_textview,
-                new ArrayList<String>());
-
         ListView list_forecast = (ListView) rootView.findViewById(R.id.listView_forecast);
         list_forecast.setAdapter(mForecastAdapter);
-        list_forecast.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*
-                TextView itemView = (TextView)
-                        view.findViewById(R.id.list_item_forecast_textview);
-                Toast.makeText(getActivity(),itemView.getText(),Toast.LENGTH_SHORT).show();
-                */
-                String forecast = mForecastAdapter.getItem(position);
-                //Toast.makeText(getActivity(),forecast, Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(getActivity(), DetailActivity.class)
-                        .putExtra(EXTRA_FORECAST_DETAIL, forecast);
-                //intent.putExtra(EXTRA_FORECAST_DETAIL,forecast);
-                startActivity(intent);
-
-            }
-        });
 
         Button btnShowMap = (Button) rootView.findViewById(R.id.buttonShowMap);
         btnShowMap.setOnClickListener(new View.OnClickListener() {
