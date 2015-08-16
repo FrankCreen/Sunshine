@@ -4,17 +4,23 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        TextView detailTextView = (TextView)
-                findViewById(R.id.detail_text);
-        detailTextView.setText(getIntent().
-                getStringExtra(ForecastFragment.EXTRA_FORECAST_DETAIL));
+
+
+//        TextView detailTextView = (TextView)
+//                findViewById(R.id.detail_text);
+//        detailTextView.setText(getIntent().
+//                getStringExtra(ForecastFragment.EXTRA_FORECAST_DETAIL));
+//        Intent intent = getIntent();
+//        if (intent != null) {
+//            String mForecastStr = intent.getDataString();
+//            detailTextView.setText(mForecastStr);
+//        }
     }
 
 
