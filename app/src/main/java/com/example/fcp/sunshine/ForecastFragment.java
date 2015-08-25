@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.fcp.sunshine.data.WeatherContract;
@@ -154,13 +153,13 @@ public class ForecastFragment extends Fragment
             }
         });
 
-        Button btnShowMap = (Button) rootView.findViewById(R.id.buttonShowMap);
-        btnShowMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showMap(mGeoLocation);
-            }
-        });
+//        Button btnShowMap = (Button) rootView.findViewById(R.id.buttonShowMap);
+//        btnShowMap.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showMap(mGeoLocation);
+//            }
+//        });
         return rootView;
     }
 
